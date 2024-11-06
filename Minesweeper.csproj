@@ -57,6 +57,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Minesweeper-old\**" />
+	  <Compile Remove="Minesweeper-old\**" />
+	  <EmbeddedResource Remove="Minesweeper-old\**" />
+	  <MauiCss Remove="Minesweeper-old\**" />
+	  <MauiXaml Remove="Minesweeper-old\**" />
+	  <None Remove="Minesweeper-old\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
