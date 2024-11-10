@@ -1,5 +1,5 @@
 # minesweeper
-Minesweeper application developed using .NET MAUI cross-platform framework.
+Minesweeper application developed using WinForms .NET framework.
 
 ## Notes
 Minesweeper game developed during early days of learning how to code at university.
