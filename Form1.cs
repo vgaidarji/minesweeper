@@ -16,5 +16,35 @@ namespace Minesweeper
         {
             InitializeComponent();
         }
+
+        private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void easyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void normalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void hardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
