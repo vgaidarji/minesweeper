@@ -16,6 +16,7 @@
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.gameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -30,6 +31,7 @@
             this.richTextBoxMines = new System.Windows.Forms.RichTextBox();
             this.fieldPanel = new System.Windows.Forms.Panel();
             this.buttonStart = new System.Windows.Forms.Button();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.menuStrip.SuspendLayout();
             this.startPanel.SuspendLayout();
             this.SuspendLayout();
@@ -194,6 +196,7 @@
         private System.Windows.Forms.RichTextBox richTextBoxMines;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Panel fieldPanel;
+        private System.Windows.Forms.Timer timer;
     }
 }
 
