@@ -1,6 +1,8 @@
 # minesweeper
 Minesweeper application developed using WinForms .NET framework.
 
+Image resources taken from https://icons8.com/icons.
+
 ## Notes
 Minesweeper game developed during early days of learning how to code at university.
 
