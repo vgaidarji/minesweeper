@@ -84,10 +84,13 @@
     <EmbeddedResource Include="Resources\Images\flag.png" />
     <EmbeddedResource Include="Resources\Images\looser.png" />
     <EmbeddedResource Include="Resources\Images\mine.png" />
-    <EmbeddedResource Include="Resources\Images\winner.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Images\start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Images\notMine.png" />
+    <EmbeddedResource Include="Resources\Images\winner.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
