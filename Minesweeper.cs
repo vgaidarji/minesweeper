@@ -55,12 +55,6 @@ namespace Minesweeper
 
             createObjects();
             startGame();
-            // show all mines locations - "-" means there's a mine 
-            /*for (int r = 0; r < rows; r++)
-				for (int c = 0; c < columns; c++)
-					if(arrayOfStates[r, c] == -1)
-						arrayOfButtons[r, c].Text = "-";*/
-			
         }
 
         void createObjects()
@@ -490,6 +484,21 @@ namespace Minesweeper
             stopTimer();
             refreshField(); // reset buttons on the field				
             startGame();
+        }
+
+        private void showMinesLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // show all mines locations - "X" means there's a mine 
+            for (int r = 0; r < rows; r++)
+            {
+                for (int c = 0; c < columns; c++)
+                {
+                    if (arrayOfStates[r, c] == -1)
+                    {
+                        arrayOfButtons[r, c].Text = "X";
+                    }
+                }
+            }
         }
     }
 }
