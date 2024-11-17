@@ -26,13 +26,13 @@
             this.hardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showMinesLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startPanel = new System.Windows.Forms.Panel();
             this.buttonStart = new System.Windows.Forms.Button();
             this.richTextBoxTime = new System.Windows.Forms.RichTextBox();
             this.richTextBoxMines = new System.Windows.Forms.RichTextBox();
             this.fieldPanel = new System.Windows.Forms.Panel();
             this.timer = new System.Windows.Forms.Timer(this.components);
-            this.showMinesLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.startPanel.SuspendLayout();
             this.SuspendLayout();
@@ -65,47 +65,54 @@
             // newGameToolStripMenuItem
             // 
             this.newGameToolStripMenuItem.Name = "newGameToolStripMenuItem";
-            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newGameToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.newGameToolStripMenuItem.Text = "New Game";
             this.newGameToolStripMenuItem.Click += new System.EventHandler(this.newGameToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(129, 6);
             // 
             // easyToolStripMenuItem
             // 
             this.easyToolStripMenuItem.Name = "easyToolStripMenuItem";
-            this.easyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.easyToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.easyToolStripMenuItem.Text = "Easy";
             this.easyToolStripMenuItem.Click += new System.EventHandler(this.easyToolStripMenuItem_Click);
             // 
             // normalToolStripMenuItem
             // 
             this.normalToolStripMenuItem.Name = "normalToolStripMenuItem";
-            this.normalToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.normalToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.normalToolStripMenuItem.Text = "Normal";
             this.normalToolStripMenuItem.Click += new System.EventHandler(this.normalToolStripMenuItem_Click);
             // 
             // hardToolStripMenuItem
             // 
             this.hardToolStripMenuItem.Name = "hardToolStripMenuItem";
-            this.hardToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.hardToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.hardToolStripMenuItem.Text = "Hard";
             this.hardToolStripMenuItem.Click += new System.EventHandler(this.hardToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(129, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // showMinesLToolStripMenuItem
+            // 
+            this.showMinesLToolStripMenuItem.Name = "showMinesLToolStripMenuItem";
+            this.showMinesLToolStripMenuItem.Size = new System.Drawing.Size(111, 20);
+            this.showMinesLToolStripMenuItem.Text = "Show/hide mines";
+            this.showMinesLToolStripMenuItem.Click += new System.EventHandler(this.showMinesLToolStripMenuItem_Click);
             // 
             // startPanel
             // 
@@ -160,13 +167,6 @@
             this.fieldPanel.Name = "fieldPanel";
             this.fieldPanel.Size = new System.Drawing.Size(294, 294);
             this.fieldPanel.TabIndex = 3;
-            // 
-            // showMinesLToolStripMenuItem
-            // 
-            this.showMinesLToolStripMenuItem.Name = "showMinesLToolStripMenuItem";
-            this.showMinesLToolStripMenuItem.Size = new System.Drawing.Size(83, 20);
-            this.showMinesLToolStripMenuItem.Text = "Show mines";
-            this.showMinesLToolStripMenuItem.Click += new System.EventHandler(this.showMinesLToolStripMenuItem_Click);
             // 
             // Minesweeper
             // 

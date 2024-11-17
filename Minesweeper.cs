@@ -39,6 +39,7 @@ namespace Minesweeper
         private int[,] arrayOfStates;
         // arrayOfIndexes[0] = rows, arrayOfIndexes[1] = cols
         private int[] arrayOfIndexes;
+        private static bool isMinesHintShown = false;
 
 # region Colors
         private Color fieldBackgroundColor = Color.FromArgb(0xD1, 0xD1, 0xD1);
@@ -100,14 +101,15 @@ namespace Minesweeper
                     fieldPanel.Controls.Add(arrayOfButtons[r, c]);
 
                     arrayOfStates[r, c] = 0;  // reset states (0 means no bombs nearby)
+                }
         }
-    }
 
-    void startGame()
+        void startGame()
         {
             // start time in seconds
             time = 0;
             timerFlag = false;
+            isMinesHintShown = false;
             // no flags yet
             flagsOnMine = 0;
             // set initial mines count in textbox
@@ -183,6 +185,7 @@ namespace Minesweeper
             richTextBoxTime.Text = "000";
 
             for (int r = 0; r < rows; r++)
+            {
                 for (int c = 0; c < columns; c++)
                 {
                     // if lost, need to init the click handlers
@@ -195,6 +198,7 @@ namespace Minesweeper
                     arrayOfButtons[r, c].MouseDown += new MouseEventHandler(buttonOnField_Mouse_Click);
                     arrayOfStates[r, c] = 0; // reset states(0 means no bombs nearby)
                 }
+            }
         }
 
         // pain the buttons raskraska knopki
@@ -488,17 +492,25 @@ namespace Minesweeper
 
         private void showMinesLToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // show all mines locations - "X" means there's a mine 
+            // show all mines locations - "X" means there's a mine
             for (int r = 0; r < rows; r++)
             {
                 for (int c = 0; c < columns; c++)
                 {
                     if (arrayOfStates[r, c] == -1)
                     {
-                        arrayOfButtons[r, c].Text = "X";
+                        if (!isMinesHintShown)
+                        {
+                            arrayOfButtons[r, c].Text = "X";
+                        } 
+                        else
+                        {
+                            arrayOfButtons[r, c].Text = "";
+                        }
                     }
                 }
             }
+            isMinesHintShown = !isMinesHintShown;
         }
     }
 }
