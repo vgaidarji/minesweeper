@@ -40,10 +40,28 @@ namespace Minesweeper
         // arrayOfIndexes[0] = rows, arrayOfIndexes[1] = cols
         private int[] arrayOfIndexes;
 
+# region Colors
+        private Color fieldBackgroundColor = Color.FromArgb(0xD1, 0xD1, 0xD1);
+        private Color defaultButtonStateColor = Color.FromArgb(0xEF, 0xEF, 0xEF);
+        private Color defaultButtonTextColor = Color.Black;
+        private Color clickedOnMineAndLostColor = Color.Red;
+        private Dictionary<int, Color> gameColors = new Dictionary<int, Color>()
+        { 
+            { 1, Color.Blue },
+            { 2, Color.Green },
+            { 3, Color.Red },
+            { 4, Color.DarkBlue },
+            { 5, Color.Brown },
+            { 6, Color.RosyBrown },
+            { 7, Color.DarkGreen },
+            { 8, Color.DarkRed },
+        };
+#endregion
+
         public Minesweeper()
         {
             // easy - 10, normal - 40, hard - 99
-            numberOfMines = 40;
+            numberOfMines = 99;
             // easy - 81(9*9), normal - 256(16*16), hard - 496 (16*31) 
             numberOfButtons = 256;
             rows = 16;
@@ -73,7 +91,7 @@ namespace Minesweeper
                     arrayOfButtons[r, c].Name = "Button";
                     arrayOfButtons[r, c].Size = new Size(20, 20);
                     arrayOfButtons[r, c].UseVisualStyleBackColor = true;
-                    arrayOfButtons[r, c].BackColor = Color.Gainsboro;
+                    arrayOfButtons[r, c].BackColor = defaultButtonStateColor;
                     arrayOfButtons[r, c].Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
                     arrayOfButtons[r, c].TabStop = true;
                     arrayOfButtons[r, c].Tag = arrayOfIndexes;
@@ -170,7 +188,8 @@ namespace Minesweeper
                     // if lost, need to init the click handlers
                     arrayOfButtons[r, c].Click += new EventHandler(buttonOnField_Click);
                     arrayOfButtons[r, c].Enabled = true;
-                    arrayOfButtons[r, c].BackColor = Color.Gainsboro;
+                    arrayOfButtons[r, c].BackColor = defaultButtonStateColor;
+                    arrayOfButtons[r, c].ForeColor = defaultButtonTextColor;
                     arrayOfButtons[r, c].Text = "";
                     arrayOfButtons[r, c].BackgroundImage = null;
                     arrayOfButtons[r, c].MouseDown += new MouseEventHandler(buttonOnField_Mouse_Click);
@@ -181,33 +200,12 @@ namespace Minesweeper
         // pain the buttons raskraska knopki
         void paintButton(int r, int c)
         {
-            arrayOfButtons[r, c].BackColor = Color.DarkBlue;
-            switch (arrayOfStates[r, c])
+            arrayOfButtons[r, c].BackColor = fieldBackgroundColor;
+
+            // paint the number
+            if (arrayOfStates[r, c] > 0 && arrayOfStates[r, c] < 9)
             {
-                case 1:
-                    arrayOfButtons[r, c].ForeColor = Color.Aquamarine;
-                    break;
-                case 2:
-                    arrayOfButtons[r, c].ForeColor = Color.Orange;
-                    break;
-                case 3:
-                    arrayOfButtons[r, c].ForeColor = Color.DeepPink;
-                    break;
-                case 4:
-                    arrayOfButtons[r, c].ForeColor = Color.OliveDrab;
-                    break;
-                case 5:
-                    arrayOfButtons[r, c].ForeColor = Color.GreenYellow;
-                    break;
-                case 6:
-                    arrayOfButtons[r, c].ForeColor = Color.FloralWhite;
-                    break;
-                case 7:
-                    arrayOfButtons[r, c].ForeColor = Color.Lime;
-                    break;
-                case 8:
-                    arrayOfButtons[r, c].ForeColor = Color.Red;
-                    break;
+                arrayOfButtons[r, c].ForeColor = gameColors[arrayOfStates[r, c]];
             }
             arrayOfButtons[r, c].Text = Convert.ToString(arrayOfStates[r, c]);
             // disable clicks		
@@ -229,7 +227,7 @@ namespace Minesweeper
                         for (int j = 0; j < columns; j++)
                         { // open the mines on the field
                             if (Convert.ToInt32(arrayOfStates[i, j]) == -1)
-                            { // if mine - load the image 
+                            { // if mine - load the image
                                 arrayOfButtons[i, j].BackgroundImage = Properties.Resources.mine;
                                 arrayOfButtons[i, j].BackgroundImageLayout = ImageLayout.Zoom;
                             }
@@ -248,6 +246,7 @@ namespace Minesweeper
 
                         }
                     // lost
+                    arrayOfButtons[r, c].BackColor = clickedOnMineAndLostColor;
                     buttonStart.BackgroundImage = Properties.Resources.looser;
                     buttonStart.BackgroundImageLayout = ImageLayout.Zoom;
                     stopTimer();
@@ -258,7 +257,7 @@ namespace Minesweeper
 
             // paint pressed button 
             arrayOfButtons[r, c].Text = "";
-            arrayOfButtons[r, c].ForeColor = Color.DarkBlue;
+            arrayOfButtons[r, c].ForeColor = fieldBackgroundColor;
             // disable clicks, if flag is not on the button
             if (arrayOfButtons[r, c].BackgroundImage == null)
             {
@@ -276,21 +275,21 @@ namespace Minesweeper
                     int posC = c + l;
                     if (l != 2 && k != 2 && posR >= 0 && posR < rows && posC >= 0 && posC < columns
                         && arrayOfStates[posR, posC] != -1)
-                    { // paint the numbers pokrasim cyferki
+                    { // paint the numbers
                         if (arrayOfButtons[posR, posC].BackgroundImage == null)
                         {
-                            arrayOfButtons[posR, posC].BackColor = Color.DarkBlue;
+                            arrayOfButtons[posR, posC].BackColor = fieldBackgroundColor;
                             if (arrayOfStates[posR, posC] != 0)
                             {
                                 paintButton(posR, posC);
-                                // disable the clicks zapret myshy na pole
+                                // disable the clicks
                                 arrayOfButtons[posR, posC].Click -= new EventHandler(buttonOnField_Click);
                                 arrayOfButtons[posR, posC].MouseDown -= new MouseEventHandler(buttonOnField_Mouse_Click);
                             }
                             else
                             {
                                 arrayOfButtons[posR, posC].Text = "";
-                                arrayOfButtons[posR, posC].ForeColor = Color.DarkBlue;
+                                arrayOfButtons[posR, posC].ForeColor = fieldBackgroundColor;
                                 arrayOfButtons[posR, posC].BackgroundImage = null;
                             }
                         }
@@ -304,8 +303,7 @@ namespace Minesweeper
             }
         }
 
-#pragma region Timer
-        
+#region Timer
         void runTimer()
         {
             timer.Interval = 1000;
@@ -333,7 +331,7 @@ namespace Minesweeper
                 richTextBoxTime.Text = String.Format("{0}", time);
             timer.Enabled = true;
         }
-#pragma endregion
+#endregion
 
         private void buttonOnField_Click(object sender, EventArgs e)
         {
@@ -346,6 +344,8 @@ namespace Minesweeper
 
             int[] temp = new int[2];
             System.Windows.Forms.Button currentButton = ((System.Windows.Forms.Button) sender);
+            // reset text (remove mine hint text)
+            currentButton.Text = "";
             temp = (int[]) currentButton.Tag;
             if (arrayOfStates[temp[1], temp[0]] > 0)
             {
