@@ -408,7 +408,7 @@ namespace Minesweeper
                         stopTimer(); // stop the timer
                         buttonStart.BackgroundImage = Properties.Resources.winner;
                         buttonStart.BackgroundImageLayout = ImageLayout.Zoom;
-                        MessageBox.Show("End of the game!");
+                        MessageBox.Show("You won!");
                     }
                 }
                 else
@@ -446,7 +446,7 @@ namespace Minesweeper
                         stopTimer(); // stop the timer
                         buttonStart.BackgroundImage = Properties.Resources.winner;
                         buttonStart.BackgroundImageLayout = ImageLayout.Zoom;
-                        MessageBox.Show("End of the game!");
+                        MessageBox.Show("You won!");
                     }
                 }
             }
