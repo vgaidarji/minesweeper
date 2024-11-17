@@ -27,11 +27,11 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startPanel = new System.Windows.Forms.Panel();
-            this.buttonStart = new System.Windows.Forms.Button();
             this.richTextBoxTime = new System.Windows.Forms.RichTextBox();
             this.richTextBoxMines = new System.Windows.Forms.RichTextBox();
             this.fieldPanel = new System.Windows.Forms.Panel();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.buttonStart = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.startPanel.SuspendLayout();
             this.SuspendLayout();
@@ -116,17 +116,6 @@
             this.startPanel.Size = new System.Drawing.Size(294, 46);
             this.startPanel.TabIndex = 2;
             // 
-            // buttonStart
-            // 
-            this.buttonStart.BackgroundImage = global::Minesweeper.Properties.Resources.start;
-            this.buttonStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.buttonStart.Location = new System.Drawing.Point(128, 2);
-            this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(41, 38);
-            this.buttonStart.TabIndex = 0;
-            this.buttonStart.UseVisualStyleBackColor = true;
-            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
-            // 
             // richTextBoxTime
             // 
             this.richTextBoxTime.BackColor = System.Drawing.SystemColors.InactiveCaption;
@@ -156,6 +145,17 @@
             this.fieldPanel.Name = "fieldPanel";
             this.fieldPanel.Size = new System.Drawing.Size(294, 294);
             this.fieldPanel.TabIndex = 3;
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.BackgroundImage = global::Minesweeper.Properties.Resources.start;
+            this.buttonStart.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.buttonStart.Location = new System.Drawing.Point(128, 2);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(41, 38);
+            this.buttonStart.TabIndex = 0;
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // Minesweeper
             // 
