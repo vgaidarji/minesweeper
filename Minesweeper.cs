@@ -95,9 +95,9 @@ namespace Minesweeper
             flagsOnMine = 0;
             // set initial mines count in textbox
             if (numberOfMines > 99)
-                richTextBoxMines.Text = String.Format("{0}", numberOfButtons);
+                richTextBoxMines.Text = String.Format("{0}", numberOfMines);
             else
-                richTextBoxMines.Text = String.Format("0{0}", numberOfButtons);
+                richTextBoxMines.Text = String.Format("0{0}", numberOfMines);
 
             buttonStart.BackgroundImage = new Bitmap(Properties.Resources.start);
 
@@ -159,9 +159,9 @@ namespace Minesweeper
         {
             // set initial mines count in textbox
             if (numberOfMines > 99)
-                richTextBoxMines.Text = String.Format("{0}", numberOfButtons);
+                richTextBoxMines.Text = String.Format("{0}", numberOfMines);
             else
-                richTextBoxMines.Text = String.Format("0{0}", numberOfButtons);
+                richTextBoxMines.Text = String.Format("0{0}", numberOfMines);
 
             richTextBoxTime.Text = "000";
 

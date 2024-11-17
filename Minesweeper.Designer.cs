@@ -123,6 +123,7 @@
             this.richTextBoxTime.Location = new System.Drawing.Point(240, 4);
             this.richTextBoxTime.MaxLength = 3;
             this.richTextBoxTime.Name = "richTextBoxTime";
+            this.richTextBoxTime.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxTime.Size = new System.Drawing.Size(47, 36);
             this.richTextBoxTime.TabIndex = 2;
             this.richTextBoxTime.Text = "000";
@@ -134,6 +135,7 @@
             this.richTextBoxMines.Location = new System.Drawing.Point(3, 3);
             this.richTextBoxMines.MaxLength = 3;
             this.richTextBoxMines.Name = "richTextBoxMines";
+            this.richTextBoxMines.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.richTextBoxMines.Size = new System.Drawing.Size(47, 36);
             this.richTextBoxMines.TabIndex = 1;
             this.richTextBoxMines.Text = "000";

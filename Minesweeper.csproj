@@ -91,9 +91,6 @@
     <EmbeddedResource Include="Resources\Images\winner.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Images\bomb.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Images\mine.png" />
   </ItemGroup>
   <ItemGroup>
