@@ -14,11 +14,18 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Minesweeper
 {
+    enum Difficulty
+    {
+        Easy, 
+        Normal,
+        High
+    }
+
     public partial class Minesweeper : Form
     {
         private static int numberOfMines;
         private static int numberOfButtons;
-        private static int difficulty;
+        private static Difficulty difficulty;
         private static int rows;
         private static int columns;
         // number of correctly placed flags (on top of mines)
@@ -42,20 +49,18 @@ namespace Minesweeper
             rows = 16;
             columns = 16;
             // 1 - easy, 2 - normal, 3 - hard
-            difficulty = 2; 
+            difficulty = Difficulty.Normal; 
             timerFlag = false; 
             InitializeComponent();
 
-            buttonStart.BackgroundImage = new Bitmap(Properties.Resources.start);
-
             createObjects();
             startGame();
-            //esli bomba, to -  "-" 
+            // show all mines locations - "-" means there's a mine 
             /*for (int r = 0; r < rows; r++)
-				for (int c = 0; c < colums; c++)
-					if(this->arrayOfStates[r, c] == -1)
-						this->arrayOfButtons[r, c]->Text = "-";
-			*/
+				for (int c = 0; c < columns; c++)
+					if(arrayOfStates[r, c] == -1)
+						arrayOfButtons[r, c].Text = "-";*/
+			
         }
 
         void createObjects()
