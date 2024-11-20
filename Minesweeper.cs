@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,20 +15,13 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Minesweeper
 {
-    enum Difficulty
-    {
-        Easy, 
-        Normal,
-        High
-    }
-
     public partial class Minesweeper : Form
     {
+        private static Difficulty gameDifficulty;
         private static int numberOfMines;
-        private static int numberOfButtons;
-        private static Difficulty difficulty;
         private static int rows;
         private static int columns;
+
         // number of correctly placed flags (on top of mines)
         private static int flagsOnMine;
         private static int time;
@@ -61,19 +55,18 @@ namespace Minesweeper
 
         public Minesweeper()
         {
-            // easy - 10, normal - 40, hard - 99
-            numberOfMines = 99;
-            // easy - 81(9*9), normal - 256(16*16), hard - 496 (16*31) 
-            numberOfButtons = 256;
-            rows = 16;
-            columns = 16;
-            // 1 - easy, 2 - normal, 3 - hard
-            difficulty = Difficulty.Normal; 
-            timerFlag = false; 
             InitializeComponent();
 
-            createObjects();
+            setDifficulty(Difficulty.Normal);
             startGame();
+        }
+
+        void setDifficulty(Difficulty difficulty) 
+        {
+            gameDifficulty = difficulty;
+            numberOfMines = difficulty.NumberOfMines;
+            rows = difficulty.Rows;
+            columns = difficulty.Columns;
         }
 
         void createObjects()
@@ -85,8 +78,8 @@ namespace Minesweeper
                 for (int c = 0; c < columns; c++)
                 {
                     arrayOfIndexes = new int[2];
-                    arrayOfIndexes[0] = c; // row
-                    arrayOfIndexes[1] = r; // column
+                    arrayOfIndexes[0] = c;
+                    arrayOfIndexes[1] = r;
                     arrayOfButtons[r, c] = new System.Windows.Forms.Button();
                     arrayOfButtons[r, c].Location = new Point(r * 18, c * 18);
                     arrayOfButtons[r, c].Name = "Button";
@@ -106,6 +99,8 @@ namespace Minesweeper
 
         void startGame()
         {
+            createObjects();
+
             // start time in seconds
             time = 0;
             timerFlag = false;
