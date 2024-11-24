@@ -17,10 +17,7 @@ namespace Minesweeper
 {
     public partial class Minesweeper : Form
     {
-        private static Difficulty gameDifficulty;
-        private static int numberOfMines;
-        private static int rows;
-        private static int columns;
+        private static GameDifficulty gameDifficulty;
 
         // number of correctly placed flags (on top of mines)
         private static int flagsOnMine;
@@ -57,22 +54,57 @@ namespace Minesweeper
         {
             InitializeComponent();
 
-            setDifficulty(Difficulty.Normal);
-            startGame();
+            SetDifficulty(GameDifficulty.Normal);
+            StartGame();
         }
 
-        void setDifficulty(Difficulty difficulty) 
+        void SetDifficulty(GameDifficulty difficulty) 
         {
             gameDifficulty = difficulty;
-            numberOfMines = difficulty.NumberOfMines;
-            rows = difficulty.Rows;
-            columns = difficulty.Columns;
         }
 
-        void createObjects()
+        void StartGame()
         {
+            ResizeField();
+            CreateObjects();
+
+            // start time in seconds
+            time = 0;
+            timerFlag = false;
+            isMinesHintShown = false;
+            // no flags yet
+            flagsOnMine = 0;
+            // set initial mines count in textbox
+            if (gameDifficulty.NumberOfMines > 99)
+                richTextBoxMines.Text = String.Format("{0}", gameDifficulty.NumberOfMines);
+            else
+                richTextBoxMines.Text = String.Format("0{0}", gameDifficulty.NumberOfMines);
+
+            buttonStart.BackgroundImage = new Bitmap(Properties.Resources.start);
+
+            PutMines(); // put mines on the field
+            CalculateNumbers(); // put numbers around mines
+        }
+
+        void ResizeField()
+        {
+            // resize UI components
+            Size = new Size(gameDifficulty.FormWidth, gameDifficulty.FormHeight);
+            fieldPanel.Size = new Size(gameDifficulty.FieldWidth, gameDifficulty.FieldHeight);
+            startPanel.Size = new Size(gameDifficulty.FieldWidth, 46);
+            // move UI elements 
+            buttonStart.Location = new Point(gameDifficulty.FieldWidth / 2 - buttonStart.Width / 2, startPanel.Height / 2 - buttonStart.Height / 2 -2);
+            richTextBoxTime.Location = new Point(gameDifficulty.FieldWidth - richTextBoxTime.Width - 8, startPanel.Height / 2 - richTextBoxTime.Height / 2 - 2);
+        }
+
+        void CreateObjects()
+        {
+            int rows = gameDifficulty.Rows;
+            int columns = gameDifficulty.Columns;
             arrayOfButtons = new System.Windows.Forms.Button[rows, columns];
             arrayOfStates = new int[rows, columns];
+
+            fieldPanel.Controls.Clear();
 
             for (int r = 0; r < rows; r++)
                 for (int c = 0; c < columns; c++)
@@ -89,37 +121,15 @@ namespace Minesweeper
                     arrayOfButtons[r, c].Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
                     arrayOfButtons[r, c].TabStop = true;
                     arrayOfButtons[r, c].Tag = arrayOfIndexes;
-                    arrayOfButtons[r, c].Click += new EventHandler(buttonOnField_Click);
-                    arrayOfButtons[r, c].MouseDown += new MouseEventHandler(buttonOnField_Mouse_Click);
+                    arrayOfButtons[r, c].Click += new EventHandler(ButtonOnField_Click);
+                    arrayOfButtons[r, c].MouseDown += new MouseEventHandler(ButtonOnField_Mouse_Click);
                     fieldPanel.Controls.Add(arrayOfButtons[r, c]);
 
                     arrayOfStates[r, c] = 0;  // reset states (0 means no bombs nearby)
                 }
         }
 
-        void startGame()
-        {
-            createObjects();
-
-            // start time in seconds
-            time = 0;
-            timerFlag = false;
-            isMinesHintShown = false;
-            // no flags yet
-            flagsOnMine = 0;
-            // set initial mines count in textbox
-            if (numberOfMines > 99)
-                richTextBoxMines.Text = String.Format("{0}", numberOfMines);
-            else
-                richTextBoxMines.Text = String.Format("0{0}", numberOfMines);
-
-            buttonStart.BackgroundImage = new Bitmap(Properties.Resources.start);
-
-            putMines(); // put mines on the field
-            calculateNumbers(); // put numbers around mines
-        }
-
-        void putMines()
+        void PutMines()
         {
             // number of allocated mines 
             int n = 0;
@@ -128,25 +138,27 @@ namespace Minesweeper
             Random rnd = new Random();
             do
             {
-                r = rnd.Next(rows);
-                c = rnd.Next(columns);
+                r = rnd.Next(gameDifficulty.Rows);
+                c = rnd.Next(gameDifficulty.Columns);
                 if (arrayOfStates[r, c] != -1)
                 {
                     arrayOfStates[r, c] = -1;
                     n++;
                 }
-            } while (n != numberOfMines);
+            } while (n != gameDifficulty.NumberOfMines);
         }
 
-        void calculateNumbers()
+        void CalculateNumbers()
         {
+            int rows = gameDifficulty.Rows;
+            int columns = gameDifficulty.Columns;
             for (int r = 0; r < rows; r++)
                 for (int c = 0; c < columns; c++)
                 {
                     // if there's a bomb, then place the numbers around it
                     if (arrayOfStates[r, c] == -1) 
                     {
-                        //if (r != rows -1)
+                        if (r != rows -1 && c != columns - 1)
                         {
                             if (c > 0) // if we didn't reach minefield bounds
                                 if (arrayOfStates[r, c - 1] != -1) arrayOfStates[r, c - 1]++; //go to left
@@ -169,35 +181,35 @@ namespace Minesweeper
                 }
         }
 
-        void refreshField()
+        void RefreshField()
         {
             // set initial mines count in textbox
-            if (numberOfMines > 99)
-                richTextBoxMines.Text = String.Format("{0}", numberOfMines);
+            if (gameDifficulty.NumberOfMines > 99)
+                richTextBoxMines.Text = String.Format("{0}", gameDifficulty.NumberOfMines);
             else
-                richTextBoxMines.Text = String.Format("0{0}", numberOfMines);
+                richTextBoxMines.Text = String.Format("0{0}", gameDifficulty.NumberOfMines);
 
             richTextBoxTime.Text = "000";
 
-            for (int r = 0; r < rows; r++)
+            for (int r = 0; r < gameDifficulty.Rows; r++)
             {
-                for (int c = 0; c < columns; c++)
+                for (int c = 0; c < gameDifficulty.Columns; c++)
                 {
                     // if lost, need to init the click handlers
-                    arrayOfButtons[r, c].Click += new EventHandler(buttonOnField_Click);
+                    arrayOfButtons[r, c].Click += new EventHandler(ButtonOnField_Click);
                     arrayOfButtons[r, c].Enabled = true;
                     arrayOfButtons[r, c].BackColor = defaultButtonStateColor;
                     arrayOfButtons[r, c].ForeColor = defaultButtonTextColor;
                     arrayOfButtons[r, c].Text = "";
                     arrayOfButtons[r, c].BackgroundImage = null;
-                    arrayOfButtons[r, c].MouseDown += new MouseEventHandler(buttonOnField_Mouse_Click);
+                    arrayOfButtons[r, c].MouseDown += new MouseEventHandler(ButtonOnField_Mouse_Click);
                     arrayOfStates[r, c] = 0; // reset states(0 means no bombs nearby)
                 }
             }
         }
 
         // pain the buttons raskraska knopki
-        void paintButton(int r, int c)
+        void PaintButton(int r, int c)
         {
             arrayOfButtons[r, c].BackColor = fieldBackgroundColor;
 
@@ -208,71 +220,71 @@ namespace Minesweeper
             }
             arrayOfButtons[r, c].Text = Convert.ToString(arrayOfStates[r, c]);
             // disable clicks		
-            arrayOfButtons[r, c].MouseDown -= new MouseEventHandler(buttonOnField_Mouse_Click);
-            arrayOfButtons[r, c].Click -= new EventHandler(buttonOnField_Click);
+            arrayOfButtons[r, c].MouseDown -= new MouseEventHandler(ButtonOnField_Mouse_Click);
+            arrayOfButtons[r, c].Click -= new EventHandler(ButtonOnField_Click);
         }
 
         // recursively open buttons with 0 value (no mine)
         // r, c - indexes       
         // always set to true. if it's 1st method call in stack then it will stay true; if has been called recursively then false
-        void openFree(int r, int c, bool userClick)
+        void OpenFree(int row, int column, bool userClick)
         {
-            if (arrayOfStates[r, c] != 0)
+            if (arrayOfStates[row, column] != 0)
             {
                 if (!userClick) return;
-                if (arrayOfStates[r, c] == -1)
+                if (arrayOfStates[row, column] == -1)
                 { // if found the mine
-                    for (int i = 0; i < rows; i++)
-                        for (int j = 0; j < columns; j++)
+                    for (int r = 0; r < gameDifficulty.Rows; r++)
+                        for (int c = 0; c < gameDifficulty.Columns; c++)
                         { // open the mines on the field
-                            if (Convert.ToInt32(arrayOfStates[i, j]) == -1)
+                            if (Convert.ToInt32(arrayOfStates[r, c]) == -1)
                             { // if mine - load the image
-                                arrayOfButtons[i, j].BackgroundImage = Properties.Resources.mine;
-                                arrayOfButtons[i, j].BackgroundImageLayout = ImageLayout.Zoom;
+                                arrayOfButtons[r, c].BackgroundImage = Properties.Resources.mine;
+                                arrayOfButtons[r, c].BackgroundImageLayout = ImageLayout.Zoom;
                             }
                             else
                             { // if put the mines not correctly 
-                                if (Convert.ToInt32(arrayOfStates[i, j]) != -1 && arrayOfButtons[i, j].BackgroundImage != null)
+                                if (Convert.ToInt32(arrayOfStates[r, c]) != -1 && arrayOfButtons[r, c].BackgroundImage != null)
                                 {
-                                    arrayOfButtons[i, j].BackgroundImage = Properties.Resources.notMine;
-                                    arrayOfButtons[i, j].BackgroundImageLayout = ImageLayout.Zoom;
-                                    arrayOfButtons[i, j].Text = "";
+                                    arrayOfButtons[r, c].BackgroundImage = Properties.Resources.notMine;
+                                    arrayOfButtons[r, c].BackgroundImageLayout = ImageLayout.Zoom;
+                                    arrayOfButtons[r, c].Text = "";
                                 }
                             }
                             // disable clicks
-                            arrayOfButtons[i, j].Click -= new EventHandler(buttonOnField_Click);
-                            arrayOfButtons[i, j].MouseDown -= new MouseEventHandler(buttonOnField_Mouse_Click);
+                            arrayOfButtons[r, c].Click -= new EventHandler(ButtonOnField_Click);
+                            arrayOfButtons[r, c].MouseDown -= new MouseEventHandler(ButtonOnField_Mouse_Click);
 
                         }
                     // lost
-                    arrayOfButtons[r, c].BackColor = clickedOnMineAndLostColor;
+                    arrayOfButtons[row, column].BackColor = clickedOnMineAndLostColor;
                     buttonStart.BackgroundImage = Properties.Resources.looser;
                     buttonStart.BackgroundImageLayout = ImageLayout.Zoom;
-                    stopTimer();
+                    StopTimer();
                     return;
                 }
                 return;
             }
 
             // paint pressed button 
-            arrayOfButtons[r, c].Text = "";
-            arrayOfButtons[r, c].ForeColor = fieldBackgroundColor;
+            arrayOfButtons[row, column].Text = "";
+            arrayOfButtons[row, column].ForeColor = fieldBackgroundColor;
             // disable clicks, if flag is not on the button
-            if (arrayOfButtons[r, c].BackgroundImage == null)
+            if (arrayOfButtons[row, column].BackgroundImage == null)
             {
-                arrayOfButtons[r, c].MouseDown -= new MouseEventHandler(buttonOnField_Mouse_Click);
-                arrayOfButtons[r, c].Click -= new EventHandler(buttonOnField_Click);
+                arrayOfButtons[row, column].MouseDown -= new MouseEventHandler(ButtonOnField_Mouse_Click);
+                arrayOfButtons[row, column].Click -= new EventHandler(ButtonOnField_Click);
             }
 
-            arrayOfStates[r, c] = -2; // means we already checked this button
+            arrayOfStates[row, column] = -2; // means we already checked this button
 
-            for (int k = -1; k < 2; k++)
+            for (int r = -1; r < 2; r++)
             {
-                for (int l = -1; l < 2; l++)
+                for (int c = -1; c < 2; c++)
                 {
-                    int posR = r + k;
-                    int posC = c + l;
-                    if (l != 2 && k != 2 && posR >= 0 && posR < rows && posC >= 0 && posC < columns
+                    int posR = row + r;
+                    int posC = column + c;
+                    if (c != 2 && r != 2 && posR >= 0 && posR < gameDifficulty.Rows && posC >= 0 && posC < gameDifficulty.Columns
                         && arrayOfStates[posR, posC] != -1)
                     { // paint the numbers
                         if (arrayOfButtons[posR, posC].BackgroundImage == null)
@@ -280,10 +292,10 @@ namespace Minesweeper
                             arrayOfButtons[posR, posC].BackColor = fieldBackgroundColor;
                             if (arrayOfStates[posR, posC] != 0)
                             {
-                                paintButton(posR, posC);
+                                PaintButton(posR, posC);
                                 // disable the clicks
-                                arrayOfButtons[posR, posC].Click -= new EventHandler(buttonOnField_Click);
-                                arrayOfButtons[posR, posC].MouseDown -= new MouseEventHandler(buttonOnField_Mouse_Click);
+                                arrayOfButtons[posR, posC].Click -= new EventHandler(ButtonOnField_Click);
+                                arrayOfButtons[posR, posC].MouseDown -= new MouseEventHandler(ButtonOnField_Mouse_Click);
                             }
                             else
                             {
@@ -295,7 +307,7 @@ namespace Minesweeper
                         // if we have more free buttons
                         if (arrayOfStates[posR, posC] == 0)
                         {
-                            openFree(posR, posC, false);
+                            OpenFree(posR, posC, false);
                         }
                     }
                 }
@@ -303,22 +315,22 @@ namespace Minesweeper
         }
 
 #region Timer
-        void runTimer()
+        void RunTimer()
         {
             timer.Interval = 1000;
-            timer.Tick += new EventHandler(timer_Tick);
+            timer.Tick += new EventHandler(Timer_Tick);
             timer.Start();
             timer.Enabled = true;
         }
         
-        void stopTimer()
+        void StopTimer()
         {
             timer.Stop();
             timer.Enabled = false;
-            timer.Tick -= new EventHandler(timer_Tick);
+            timer.Tick -= new EventHandler(Timer_Tick);
             timer.Interval = 1000;
         }
-        private void timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             timer.Enabled = false;
             ++time;
@@ -332,10 +344,10 @@ namespace Minesweeper
         }
 #endregion
 
-        private void buttonOnField_Click(object sender, EventArgs e)
+        private void ButtonOnField_Click(object sender, EventArgs e)
         {
             if (!timerFlag) // start the timer
-                runTimer();
+                RunTimer();
             timerFlag = true;
             // change the image 
             buttonStart.BackgroundImage = Properties.Resources.start;
@@ -348,21 +360,21 @@ namespace Minesweeper
             temp = (int[]) currentButton.Tag;
             if (arrayOfStates[temp[1], temp[0]] > 0)
             {
-                paintButton(temp[1], temp[0]);
+                PaintButton(temp[1], temp[0]);
             }
             else
             {
-                openFree(temp[1], temp[0], true);
+                OpenFree(temp[1], temp[0], true);
             }
 
         }
 
-        private void buttonOnField_Mouse_Click(object sender, MouseEventArgs e)
+        private void ButtonOnField_Mouse_Click(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             { // handle right mouse click
                 if (!timerFlag) // start the timer
-                    runTimer();
+                    RunTimer();
                 timerFlag = true;
 
                 // change the image 
@@ -377,10 +389,10 @@ namespace Minesweeper
                 {
                     arrayOfButtons[temp[1], temp[0]].BackgroundImage = Properties.Resources.flag;
                     arrayOfButtons[temp[1], temp[0]].BackgroundImageLayout = ImageLayout.Zoom;
-                    arrayOfButtons[temp[1], temp[0]].Click -= new EventHandler(buttonOnField_Click);
+                    arrayOfButtons[temp[1], temp[0]].Click -= new EventHandler(ButtonOnField_Click);
 
                     // change mines count in text box
-                    if (numberOfMines > 99)
+                    if (gameDifficulty.NumberOfMines > 99)
                         richTextBoxMines.Text = String.Format("{0}", Convert.ToInt32(richTextBoxMines.Text) - 1);
                     else
                     {
@@ -401,9 +413,9 @@ namespace Minesweeper
                         flagsOnMine++; // if there's a flag on top of the mine
 
                     // if on all mines there's a flag and no flags in other places - end of the game
-                    if (flagsOnMine == numberOfMines && Convert.ToInt32(richTextBoxMines.Text) == 0)
+                    if (flagsOnMine == gameDifficulty.NumberOfMines && Convert.ToInt32(richTextBoxMines.Text) == 0)
                     {
-                        stopTimer(); // stop the timer
+                        StopTimer(); // stop the timer
                         buttonStart.BackgroundImage = Properties.Resources.winner;
                         buttonStart.BackgroundImageLayout = ImageLayout.Zoom;
                         MessageBox.Show("You won!");
@@ -412,17 +424,17 @@ namespace Minesweeper
                 else
                 {
                     arrayOfButtons[temp[1], temp[0]].BackgroundImage = null;
-                    arrayOfButtons[temp[1], temp[0]].Click += new EventHandler(buttonOnField_Click);
+                    arrayOfButtons[temp[1], temp[0]].Click += new EventHandler(ButtonOnField_Click);
 
                     // change mines count in text box
-                    if (numberOfMines > 99)
+                    if (gameDifficulty.NumberOfMines > 99)
                         richTextBoxMines.Text = String.Format("{0}", Convert.ToInt32(richTextBoxMines.Text) + 1);
                     else
                     {
                         int var = Convert.ToInt32(richTextBoxMines.Text);
-                        if (var + 1 > numberOfMines)
+                        if (var + 1 > gameDifficulty.NumberOfMines)
                         {
-                            richTextBoxMines.Text = Convert.ToString(numberOfMines);
+                            richTextBoxMines.Text = Convert.ToString(gameDifficulty.NumberOfMines);
                         }
                         else
                         {
@@ -439,9 +451,9 @@ namespace Minesweeper
                         flagsOnMine--; // if flag is on top of the mine
 
                     // if on all mines there's a flag and no flags in other places - end of the game
-                    if (flagsOnMine == numberOfMines && Convert.ToInt32(richTextBoxMines.Text) == 0)
+                    if (flagsOnMine == gameDifficulty.NumberOfMines && Convert.ToInt32(richTextBoxMines.Text) == 0)
                     {
-                        stopTimer(); // stop the timer
+                        StopTimer(); // stop the timer
                         buttonStart.BackgroundImage = Properties.Resources.winner;
                         buttonStart.BackgroundImageLayout = ImageLayout.Zoom;
                         MessageBox.Show("You won!");
@@ -450,47 +462,50 @@ namespace Minesweeper
             }
         }
 
-        private void newGameToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewGameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            stopTimer();
-            refreshField(); // reset buttons on the field				
-            startGame();
+            StopTimer();
+            RefreshField(); // reset buttons on the field				
+            StartGame();
 
         }
 
-        private void easyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void EasyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            SetDifficulty(GameDifficulty.Easy);
+            StartGame();
         }
 
-        private void normalToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NormalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            SetDifficulty(GameDifficulty.Normal);
+            StartGame();
         }
 
-        private void hardToolStripMenuItem_Click(object sender, EventArgs e)
+        private void HardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            SetDifficulty(GameDifficulty.Hard);
+            StartGame();
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void buttonStart_Click(object sender, EventArgs e)
+        private void ButtonStart_Click(object sender, EventArgs e)
         {
-            stopTimer();
-            refreshField(); // reset buttons on the field				
-            startGame();
+            StopTimer();
+            RefreshField(); // reset buttons on the field				
+            StartGame();
         }
 
-        private void showMinesLToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ShowMinesLToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // show all mines locations - "X" means there's a mine
-            for (int r = 0; r < rows; r++)
+            for (int r = 0; r < gameDifficulty.Rows; r++)
             {
-                for (int c = 0; c < columns; c++)
+                for (int c = 0; c < gameDifficulty.Columns; c++)
                 {
                     if (arrayOfStates[r, c] == -1)
                     {
